@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LimaCicloVIP — Rutas y comunidad ciclista en Lima</title>
+<meta name="description" content="LimaCicloVIP: la app para ciclistas de Lima. Rutas, mapa en vivo, comunidad y tracking. Descarga el APK gratis.">
+<meta name="theme-color" content="#0b0f14">
+<meta property="og:title" content="LimaCicloVIP">
+<meta property="og:description" content="Rutas, mapa y comunidad ciclista en Lima. Descarga el APK.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0b0f14; --bg2:#111823; --card:#151d2a; --line:#1f2b3d;
+    --txt:#e8eef7; --dim:#8b9ab0; --acc:#a3e635; --acc2:#22d3ee;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--txt); line-height:1.6;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,15,20,.85);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.5px;font-size:19px}
+  .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+  .logo span{color:var(--acc)}
+  .navlinks{display:flex;gap:22px;font-size:14px;color:var(--dim)}
+  .navlinks a:hover{color:var(--acc)}
+  @media(max-width:620px){.navlinks{display:none}}
+
+  header{position:relative;padding:80px 0 70px;overflow:hidden}
+  header::before{
+    content:"";position:absolute;top:-40%;right:-20%;width:640px;height:640px;
+    background:radial-gradient(circle,rgba(163,230,53,.16),transparent 62%);
+    pointer-events:none;
+  }
+  header::after{
+    content:"";position:absolute;bottom:-30%;left:-15%;width:520px;height:520px;
+    background:radial-gradient(circle,rgba(34,211,238,.12),transparent 62%);
+    pointer-events:none;
+  }
+  .hero{position:relative;z-index:2;max-width:700px}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;
+    color:var(--acc);background:rgba(163,230,53,.1);
+    border:1px solid rgba(163,230,53,.3);border-radius:999px;
+    padding:6px 14px;margin-bottom:22px;
+  }
+  .badge i{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  h1{font-size:clamp(38px,8vw,62px);line-height:1.05;letter-spacing:-2px;font-weight:800;margin-bottom:20px}
+  h1 em{font-style:normal;background:linear-gradient(95deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{font-size:17.5px;color:var(--dim);margin-bottom:34px;max-width:560px}
+
+  .btns{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:15px 26px;border-radius:14px;font-weight:700;font-size:15.5px;
+    border:1px solid transparent;transition:.2s;cursor:pointer;
+  }
+  .btn-main{background:var(--acc);color:#0b0f14;box-shadow:0 10px 30px rgba(163,230,53,.22)}
+  .btn-main:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(163,230,53,.32)}
+  .btn-ghost{border-color:var(--line);background:var(--card)}
+  .btn-ghost:hover{border-color:var(--acc);color:var(--acc)}
+  .meta{margin-top:20px;font-size:13px;color:var(--dim);display:flex;gap:18px;flex-wrap:wrap}
+  .meta b{color:var(--txt);font-weight:600}
+
+  section{padding:70px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin-bottom:12px}
+  h2{font-size:clamp(26px,5vw,38px);letter-spacing:-1px;font-weight:800;margin-bottom:14px}
+  .lead{color:var(--dim);max-width:600px;margin-bottom:44px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .card{
+    background:linear-gradient(160deg,var(--card),var(--bg2));
+    border:1px solid var(--line);border-radius:18px;padding:26px;transition:.25s;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(163,230,53,.4)}
+  .ico{
+    width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+    font-size:21px;background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.22);margin-bottom:16px;
+  }
+  .card h3{font-size:17px;margin-bottom:8px;font-weight:700}
+  .card p{font-size:14.5px;color:var(--dim)}
+
+  .steps{counter-reset:s;display:grid;gap:14px}
+  .step{
+    display:flex;gap:16px;align-items:flex-start;
+    background:var(--bg2);border:1px solid var(--line);
+    border-radius:16px;padding:20px 22px;
+  }
+  .step::before{
+    counter-increment:s;content:counter(s);
+    flex:0 0 34px;height:34px;border-radius:10px;
+    display:grid;place-items:center;font-weight:800;font-size:15px;
+    background:var(--acc);color:#0b0f14;
+  }
+  .step h3{font-size:15.5px;margin-bottom:4px}
+  .step p{font-size:14px;color:var(--dim)}
+  .warn{
+    margin-top:22px;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.28);
+    border-radius:14px;padding:16px 20px;font-size:14px;color:#bfe9f2;
+  }
+
+  details{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
+  details[open]{border-color:rgba(163,230,53,.35)}
+  summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--acc);font-weight:800;font-size:19px;line-height:1}
+  details[open] summary::after{content:"−"}
+  details p{margin-top:12px;font-size:14.5px;color:var(--dim)}
+  code{background:#0b0f14;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:13px;color:var(--acc2)}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;font-size:13.5px;color:var(--dim)}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a:hover{color:var(--acc)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>LimaCiclo<span>VIP</span></div>
+    <div class="navlinks">
+      <a href="#features">Funciones</a>
+      <a href="#instalar">Instalar</a>
+      <a href="#faq">Preguntas</a>
+      <a href="https://github.com/Laito88/ciclovip" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="hero">
+      <div class="badge"><i></i> Versión 1.0 · Android</div>
+      <h1>Pedalea Lima<br>como un <em>VIP</em></h1>
+      <p class="sub">Rutas, mapa en vivo y comunidad ciclista. LimaCicloVIP te organiza cada salida en la ciudad, de Miraflores a Chosica, sin complicarte.</p>
+      <div class="btns">
+        <a class="btn btn-main" href="https://github.com/Laito88/ciclovip/releases/latest/download/app-debug.apk" id="dl">
+          ⬇ Descargar APK
+        </a>
+        <a class="btn btn-ghost" href="#instalar">Cómo instalarlo</a>
+      </div>
+      <div class="meta">
+        <span>Gratis · Sin anuncios</span>
+        <span>Peso aprox. <b>~15 MB</b></span>
+        <span>Android <b>8.0+</b></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="kicker">Funciones</div>
+    <h2>Todo lo que necesitas para rodar</h2>
+    <p class="lead">Diseñada pensando en cómo se pedalea realmente en Lima: tráfico, pendientes y rutas que sí existen.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🗺️</div><h3>Rutas en Lima</h3><p>Recorridos armados por ciclistas locales, con distancia, desnivel y nivel de dificultad.</p></div>
+      <div class="card"><div class="ico">📍</div><h3>Mapa en vivo</h3><p>Ubicación en tiempo real y seguimiento del recorrido mientras pedaleas.</p></div>
+      <div class="card"><div class="ico">🚴</div><h3>Comunidad</h3><p>Sumate a salidas grupales, comparte tus rutas y mira lo que hacen otros.</p></div>
+      <div class="card"><div class="ico">📊</div><h3>Estadísticas</h3><p>Kilómetros, tiempo y velocidad promedio de cada salida, guardados en tu perfil.</p></div>
+      <div class="card"><div class="ico">🌙</div><h3>Modo oscuro</h3><p>Interfaz oscura por defecto, para no encandilarte en salidas nocturnas.</p></div>
+      <div class="card"><div class="ico">⚡</div><h3>Ligera</h3><p>Poco peso, arranque rápido y consumo de batería controlado.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="instalar">
+  <div class="wrap">
+    <div class="kicker">Instalación</div>
+    <h2>Cómo instalarlo en tu cel</h2>
+    <p class="lead">Es un APK directo, no está en Play Store. Son 3 pasos y 30 segundos.</p>
+    <div class="steps">
+      <div class="step"><div><h3>Descarga el archivo</h3><p>Toca el botón de descarga desde el navegador del teléfono. Se guardará en <code>Descargas</code>.</p></div></div>
+      <div class="step"><div><h3>Permite instalar desde esta fuente</h3><p>Al abrir el archivo, Android pedirá permiso. Ve a <code>Ajustes</code>, activa <b>Permitir desde esta fuente</b> y vuelve atrás.</p></div></div>
+      <div class="step"><div><h3>Toca Instalar</h3><p>Si sale el aviso de Play Protect ("app no verificada"), elige <b>Instalar de todas formas</b>. Listo.</p></div></div>
+    </div>
+    <div class="warn">
+      <b>iPhone:</b> el APK no se instala directo, necesitas AltStore o Sideloadly desde una computadora.
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="kicker">Preguntas</div>
+    <h2>Dudas rápidas</h2>
+    <div style="margin-top:34px">
+      <details><summary>¿Es gratis?</summary><p>Sí, totalmente gratis y sin publicidad.</p></details>
+      <details><summary>¿Por qué no está en Play Store?</summary><p>Porque es un proyecto directo desde GitHub. Se distribuye como APK para publicar versiones rápido y sin esperar revisiones.</p></details>
+      <details><summary>¿Sale "app no verificada"?</summary><p>Es normal en builds de desarrollo. Toca <b>Instalar de todas formas</b>. Si quieres, puedes verificar el archivo viendo el código fuente en el repositorio.</p></details>
+      <details><summary>¿Cómo se actualiza?</summary><p>Descarga el APK nuevo desde el mismo enlace y lo instalas encima. Tus datos se mantienen.</p></details>
+      <details><summary>Me sale "App no instalada"</summary><p>Tienes una versión anterior con otra firma. Desinstala la que tienes e instala de nuevo.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="y">2026</span> LimaCicloVIP — Hecho en Lima 🚲</div>
+    <div><a href="https://github.com/Laito88/ciclovip" target="_blank" rel="noopener">Repositorio</a></div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+  var ua = navigator.userAgent;
+  var isAndroid = /Android/i.test(ua);
+  var isiOS = /iPhone|iPad|iPod/i.test(ua);
+  if (isiOS) {
+    document.getElementById('dl').innerHTML = '⬇ Descargar APK (Android)';
+  } else if (isAndroid) {
+    document.getElementById('dl').innerHTML = '⬇ Descargar e instalar';
+  }
+</script>
+
+</body>
+</html>
